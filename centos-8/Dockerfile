@@ -14,17 +14,9 @@ rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 RUN yum -y install rpm centos-release \
   && yum -y update \
-  && yum -y install epel-release initscripts sudo which hostname \
-    python3 python3-pip
-
-RUN pip3 install ansible
+  && yum -y install epel-release initscripts sudo which hostname
 
 # Disable requiretty.
 RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
 
-# Install Ansible inventory file.
-RUN mkdir -p /etc/ansible
-RUN echo -e '[local]\nlocalhost ansible_connection=local' > /etc/ansible/hosts
-
-VOLUME ["/sys/fs/cgroup"]
 CMD ["/usr/lib/systemd/systemd"]
